@@ -1,8 +1,8 @@
 package misc.example;
 
-public class Example
+class Example
 {
-    public int returnInputNumber(int n)
+    int returnInputNumber(int n)
     {
         return n;
     }
