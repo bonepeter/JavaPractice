@@ -1,31 +1,53 @@
 package number.roman_number;
 
-public class RomanNumber
+class RomanNumber
 {
-    static String toRomanNumber(int n)
+    private StringBuilder result = new StringBuilder();
+
+    String romanNumber(int n)
     {
-        StringBuilder result = new StringBuilder();
-
-        if (n > 5)
+        if (n <= 0)
         {
-            return "VI";
+            throw new IllegalArgumentException("Number cannot be zero or negative");
         }
 
-        if (n == 5)
+        if (n > 3999)
         {
-            return "V";
+            throw new IllegalArgumentException("Number cannot larger than 3999");
         }
 
-        if (n == 4)
-        {
-            return "IV";
-        }
+        int number = n;
+        int digit = 0;
 
-        for (int i=0; i<n; i++)
+        RomanCharacter[] characters = getRomanCharacters();
+
+        while (number > 0)
         {
-            result.append("I");
+            int oneDigit = number % 10;
+            number = number / 10;
+
+            OneDigitRomanNumber oneDigitRomanNumber = new OneDigitRomanNumber(characters[digit]);
+            digit ++;
+
+            addLeftMostDigit(oneDigitRomanNumber.romanDigit(oneDigit));
         }
 
         return result.toString();
+    }
+
+    private RomanCharacter[] getRomanCharacters()
+    {
+        RomanCharacter[] characters = new RomanCharacter[4];
+        characters[0] = new RomanCharacterForFirstDigit();
+        characters[1] = new RomanCharacterForSecondDigit();
+        characters[2] = new RomanCharacterForThirdDigit();
+        characters[3] = new RomanCharacterForFourthDigit();
+        return characters;
+    }
+
+    private RomanNumber addLeftMostDigit(String anotherRomanNumber)
+    {
+        result.insert(0, anotherRomanNumber);
+        return this;
     }
 }
