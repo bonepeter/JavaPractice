@@ -6,29 +6,23 @@ class AddTwoNumbers
     {
         ListNode node1 = list1;
         ListNode node2 = list2;
-        ListNode result = new ListNode(0);
-        ListNode resultNode = result;
+
+        ListNode resultDummyHeadNode = new ListNode(0);
+        ListNode resultNode = resultDummyHeadNode;
+
         int carrier = 0;
 
         while (node1 != null || node2 != null)
         {
-            int val1 = (node1 != null) ? node1.val : 0;
+            int sum = nodeValue(node1) + nodeValue(node2) + carrier;
 
-            int val2 = (node2 != null) ? node2.val : 0;
-
-            int sum = val1 + val2 + carrier;
             resultNode.next = new ListNode(sum % 10);
+
             carrier = sum / 10;
 
-            if (node1 != null)
-            {
-                node1 = node1.next;
-            }
+            node1 = nextNode(node1);
 
-            if (node2 != null)
-            {
-                node2 = node2.next;
-            }
+            node2 = nextNode(node2);
 
             resultNode = resultNode.next;
         }
@@ -38,6 +32,20 @@ class AddTwoNumbers
             resultNode.next = new ListNode(carrier);
         }
 
-        return result.next;
+        return resultDummyHeadNode.next;
+    }
+
+    private ListNode nextNode(ListNode node1)
+    {
+        if (node1 != null)
+        {
+            node1 = node1.next;
+        }
+        return node1;
+    }
+
+    private int nodeValue(ListNode node1)
+    {
+        return (node1 != null) ? node1.val : 0;
     }
 }
