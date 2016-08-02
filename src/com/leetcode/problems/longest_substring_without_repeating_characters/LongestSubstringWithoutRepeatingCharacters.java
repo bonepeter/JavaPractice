@@ -8,85 +8,51 @@ package com.leetcode.problems.longest_substring_without_repeating_characters;
  */
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 class LongestSubstringWithoutRepeatingCharacters
 {
-    private int repeatCharacterPosition = 0;
-
     int lengthOfLongestSubstring(String input)
     {
-        String workingString = input;
+        int[] map = new int[128];
 
-        String longest = "";
+        int longest = 0;
 
-        String currentLongest;
-
-        while (isNotEmpty(workingString))
+        for (int endPos = 0, startPos = 0; endPos < input.length(); endPos++)
         {
-            currentLongest = LongestSubstringFromTheBeginning(workingString);
+            Character pointingCharacter = input.charAt(endPos);
 
-            workingString = workingString.substring(repeatCharacterPosition);
+            startPos = Math.max(startPos, map[pointingCharacter]);
 
+            map[pointingCharacter] = endPos + 1;
 
-            longest = getLongestString(longest, currentLongest);
+            longest = Math.max(longest, endPos - startPos + 1);
         }
 
-        return longest.length();
+        return longest;
     }
 
-    private String getLongestString(String s1, String s2)
+    @SuppressWarnings("unused")
+    int lengthOfLongestSubstring_input_not_limited_to_standard_ascii(String input)
     {
-        if (s1.length() >= s2.length())
+        Map<Character, Integer> map = new HashMap<>();
+
+        int longest = 0;
+
+        for (int endPos = 0, startPos = 0; endPos < input.length(); endPos++)
         {
-            return s1;
-        }
-        else
-        {
-            return s2;
-        }
-    }
+            Character pointingCharacter = input.charAt(endPos);
 
-    private boolean isNotEmpty(String s)
-    {
-        return ! s.equals("");
-    }
-
-    private String LongestSubstringFromTheBeginning(String input)
-    {
-        StringBuilder result = new StringBuilder();
-
-//        Set<String> set = new HashSet<>();
-
-        Map<String, Integer> map = new HashMap<>();
-
-        for (int i = 0; i < input.length(); i++)
-        {
-            String oneCharacter = input.substring(i, i + 1);
-
-
-            if (map.containsKey(oneCharacter))
+            if (map.containsKey(pointingCharacter))
             {
-                repeatCharacterPosition = map.get(oneCharacter) + 1;
-                return result.toString();
+                startPos = Math.max(startPos, map.get(pointingCharacter) + 1);
             }
 
-//            if (set.contains(oneCharacter))
-//            {
-//                return result.toString();
-//            }
+            map.put(pointingCharacter, endPos);
 
-            map.put(oneCharacter, i);
-
-//            set.add(oneCharacter);
-
-            result.append(oneCharacter);
+            longest = Math.max(longest, endPos - startPos + 1);
         }
-        repeatCharacterPosition = input.length();
 
-        return result.toString();
+        return longest;
     }
-
 }
